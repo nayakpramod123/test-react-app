@@ -1,0 +1,12 @@
+{
+  "basePath": "/react-app",
+  "assetPath": "/assets/public",
+  "domains": {
+    "restService": "http://localhost:8088"
+  },
+  "services": {
+    "students":"/api/Students",
+    "familyMembers":"/api/FamilyMembers",
+    "nationalities": "/api/Nationalities"
+  }
+}

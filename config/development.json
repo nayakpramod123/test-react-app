@@ -1,0 +1,13 @@
+{
+  "basePath": "/react-app",
+  "name": "development",
+  "root": "/",
+  "domains": {
+    "restService": "http://localhost:8088"
+  },
+  "services": {
+    "students":"/api/Students",
+    "familyMembers":"/api/FamilyMembers",
+    "nationalities": "/api/Nationalities"
+  }
+}
