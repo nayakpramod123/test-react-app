@@ -16,7 +16,7 @@ import {
 } from './middleware/index'
 import { isDev } from './utils/index'
 import { validateHealth, validateRoot } from './validation'
-import { getHealth, getStudentsList, setStudentsList, setStudentData, getStudentNationality, setStudentNationality, getStudentsFamilyList, setStudentsFamilyList,
+import { getHealth, getRoot, getStudentsList, setStudentsList, setStudentData, getStudentNationality, setStudentNationality, getStudentsFamilyList, setStudentsFamilyList,
   setFamilyMembers, deleteFamilyMembers, getNationalityOfFamilyMembers, setNationalityOfFamilyMembers,  getAllNationalities} from './routes/index'
 
 const app = express()
@@ -71,6 +71,7 @@ api.route('/deleteFamilyMembers/:id').delete(logger(), validateRoot, csrfProtect
 api.route('/getNationalityOfFamilyMembers/:id/Nationality').get(logger(), validateRoot, csrfProtection, getNationalityOfFamilyMembers)
 api.route('/setNationalityOfFamilyMembers/:id/Nationality/:nationalityId').put(logger(), validateRoot, csrfProtection, setNationalityOfFamilyMembers)
 api.route('/getAllNationalities').get(logger(), validateRoot, csrfProtection, getAllNationalities)
+api.route('/').get(logger(), validateRoot, csrfProtection, getRoot)
 
 app.use(basePath, api)
 

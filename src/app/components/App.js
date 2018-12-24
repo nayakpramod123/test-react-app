@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchInitialState } from '../store/actions/action-creators'
 import ApplicationContainer from './ApplicationContainer/ApplicationContainer'
 
 class App extends React.Component {
@@ -14,7 +13,7 @@ class App extends React.Component {
   render () {
     return (
       <div className={'Application'}>
-        <ApplicationContainer />
+        <ApplicationContainer dispatch={this.props.dispatch} />
       </div>
     )
   }

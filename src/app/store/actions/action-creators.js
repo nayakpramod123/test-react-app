@@ -9,8 +9,9 @@ import {
   DELETE_FAMILY_MEMBERS_ERROR, DELETE_FAMILY_MEMBERS_SUCCESS
 } from './action-types'
 
-import config from '../../utils/configs'
-import { get } from 'axios'
+import { get, post, put } from 'axios'
+import axios from 'axios'
+import config from 'Config'
 import { update, find } from 'lodash'
 
 const fetchOptions = { credentials: 'include' }
@@ -42,20 +43,19 @@ const deleteOptions = (data) => ({
 
 // todo: add conditional load
 export const fetchInitialState = () => (dispatch) => Promise.all([
-  dispatch(fetchStudentsLists()),
-  dispatch(fetchAllNationalities())
+  dispatch(fetchStudentsLists())
 ])
 
 export const fetchStudentsLists = () => (dispatch, getState, axiosMethod) => {
   dispatch({ type: FETCH_STUDENTS })
-  return axiosMethod(`${config.basePath}/getStudentsList`, fetchOptions)
+  return get(`${config.domains.restService}${config.services.students}`, fetchOptions)
     .then(json => dispatch({ type: FETCH_STUDENTS_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_STUDENTS_ERROR, payload: err }))
 }
 
 export const saveStudentList = () => (dispatch, getState, axiosMethod) => {
   dispatch({ type: SET_STUDENT_LIST })
-  return axiosMethod(`${config.basePath}/setStudentsList`, postOptions(data))
+  return post(`${config.domains.restService}${config.services.students}`, body, postOptions(data))
     .then(json => dispatch({ type: SET_STUDENT_LIST_SUCCESS, payload: { sectionId: sectionId, questionId: questionId, json: json } }))
     .catch(err => {
       dispatch({ type: SET_STUDENT_LIST_ERROR, payload: { sectionId: sectionId, questionId: questionId, err: err, policyNum: data.policyNum } })
@@ -70,14 +70,14 @@ export const updateStudentData = (firstName, lastName, dateOfBirth, studentId) =
   }
 
   dispatch({ type: UPDATE_STUDENT_DATA })
-  return axiosMethod(`${config.basePath}/setStudentData/${studentId}`, putOptions(body))
+  return put(`${config.domains.restService}${config.services.students}/${studentId}`, body, putOptions(body))
     .then(response => dispatch({ type: UPDATE_STUDENT_DATA_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: UPDATE_STUDENT_DATA_ERROR, payload: { err: err, body: body } }))
 }
 
 export const fetchNationalityForStudents = (studentId) => (dispatch, getState, axiosMethod) => {
   dispatch({ type: FETCH_STUDENT_NATIONALITY })
-  return axiosMethod(`${config.basePath}/getNationalityForStudents/${studentId}/Nationality`, fetchOptions)
+  return get(`${config.domains.restService}${config.services.students}/${id}/Nationality/`, fetchOptions)
     .then(json => dispatch({ type: FETCH_STUDENT_NATIONALITY_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_STUDENT_NATIONALITY_ERROR, payload: err }))
 }
@@ -90,7 +90,7 @@ export const updateNationalityForStudents = (firstName, lastName, dateOfBirth, s
   }
 
   dispatch({ type: UPDATE_STUDENT_NATIONALITY })
-  return axiosMethod(`${config.basePath}/setNationalityForStudents/${studentId}/Nationality/${nationalityId}`, putOptions(body))
+  return put(`${config.domains.restService}${config.services.students}/${studentId}/Nationality/${nationalityId}`, body, putOptions(body))
     .then(response => dispatch({ type: UPDATE_STUDENT_NATIONALITY_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: UPDATE_STUDENT_NATIONALITY_ERROR, payload: { err: err, body: body } }))
 }
@@ -106,7 +106,7 @@ export const updateFamilyMembersForStudents = (studentId) => (dispatch, getState
   const body = {}
 
   dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS })
-  return axiosMethod(`${config.basePath}/setStudentsFamilyList/${studentId}/FamilyMembers`, putOptions(body))
+  return get(`${config.domains.restService}${config.services.students}/${studentId}/FamilyMembers/`, fetchOptions)
     .then(response => dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS_ERROR, payload: { err: err, body: body } }))
 }
@@ -120,19 +120,19 @@ export const updateFamilyMembers = (firstName, lastName, dateOfBirth, relationsh
   }
 
   dispatch({ type: SET_FAMILY_MEMBERS })
-  return axiosMethod(`${config.basePath}/setFamilyMembers/${familyId}`, putOptions(body))
+  return put(`${config.domains.restService}${config.services.familyMembers}/${familyId}`, body, putOptions(body))
     .then(response => dispatch({ type: SET_FAMILY_MEMBERS_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: SET_FAMILY_MEMBERS_ERROR, payload: { err: err, body: body } }))
 }
 
 export const fetchNationalityForFamilyMembers = (familyMemberId) => (dispatch, getState, axiosMethod) => {
   dispatch({ type: FETCH_FAMILY_MEMBER_NATIONALITY })
-  return axiosMethod(`${config.basePath}/getNationalityOfFamilyMembers/${familyMemberId}/Nationality`, fetchOptions)
+  return get(`${config.domains.restService}${config.services.familyMembers}/${id}/Nationality/`, fetchOptions)
     .then(json => dispatch({ type: FETCH_FAMILY_MEMBER_NATIONALITY_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_FAMILY_MEMBER_NATIONALITY_ERROR, payload: err }))
 }
-
-export const updateNationalityForFamilyMembers = (firstName, lastName, dateOfBirth, studentId, nationalityId) => (dispatch, getState, axiosMethod) => {
+``
+export const updateNationalityForFamilyMembers = (firstName, lastName, dateOfBirth, familyId, nationalityId) => (dispatch, getState, axiosMethod) => {
   const body = {
     'firstName': firstName,
     'lastName': lastName,
@@ -140,14 +140,14 @@ export const updateNationalityForFamilyMembers = (firstName, lastName, dateOfBir
   }
 
   dispatch({ type: UPDATE_FAMILY_MEMBER_NATIONALITY })
-  return axiosMethod(`${config.basePath}/setNationalityForStudents/${studentId}/Nationality/${nationalityId}`, putOptions(body))
+  return put(`${config.domains.restService}${config.services.familyMembers}/${familyId}/Nationality/${nationalityId}`, body, putOptions(body))
     .then(response => dispatch({ type: UPDATE_FAMILY_MEMBER_NATIONALITY_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: UPDATE_FAMILY_MEMBER_NATIONALITY_ERROR, payload: { err: err, body: body } }))
 }
 
 export const fetchAllNationalities = () => (dispatch, getState, axiosMethod) => {
   dispatch({ type: FETCH_ALL_NATIONALITIES })
-  return axiosMethod(`${config.basePath}/getAllNationalities`, fetchOptions)
+  return get(`${config.domains.restService}${config.services.nationalities}`, fetchOptions)
     .then(json => dispatch({ type: FETCH_ALL_NATIONALITIES_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_ALL_NATIONALITIES_ERROR, payload: err }))
 }
@@ -156,7 +156,7 @@ export const deleteFamilyMembers = (familyId) => (dispatch, getState, axiosMetho
   const body = {}
 
   dispatch({ type: DELETE_FAMILY_MEMBERS })
-  return axiosMethod(`${config.basePath}/deleteFamilyMembers/${familyId}`, deleteOptions(body))
+  return axios.delete(`${config.domains.restService}${config.services.familyMembers}/${id}`, body, deleteOptions(body))
     .then(response => dispatch({ type: DELETE_FAMILY_MEMBERS_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: DELETE_FAMILY_MEMBERS_ERROR, payload: { err: err, body: body } }))
 }

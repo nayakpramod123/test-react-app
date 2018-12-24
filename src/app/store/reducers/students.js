@@ -7,6 +7,8 @@ import {cloneDeep, findIndex, find} from 'lodash'
 
 export const initialState = {
   studentData: [],
+  studentFamilyMember:[],
+  studentNationality:[],
   isFetching: false,
   hasError: false,
   error: null
