@@ -6,7 +6,8 @@ import {
   FETCH_FAMILY_MEMBER_NATIONALITY_ERROR, FETCH_ALL_NATIONALITIES_SUCCESS, FETCH_ALL_NATIONALITIES_ERROR, SET_STUDENT_LIST_SUCCESS,
   SET_STUDENT_LIST_ERROR, UPDATE_STUDENT_FAMILY_MEMBERS_ERROR, UPDATE_STUDENT_DATA_ERROR, UPDATE_STUDENT_DATA_SUCCESS, UPDATE_STUDENT_FAMILY_MEMBERS, UPDATE_STUDENT_DATA, UPDATE_STUDENT_NATIONALITY,
   SET_FAMILY_MEMBERS_ERROR, SET_FAMILY_MEMBERS_SUCCESS, UPDATE_FAMILY_MEMBER_NATIONALITY_ERROR, UPDATE_FAMILY_MEMBER_NATIONALITY_SUCCESS,
-  DELETE_FAMILY_MEMBERS_ERROR, DELETE_FAMILY_MEMBERS_SUCCESS
+  DELETE_FAMILY_MEMBERS_ERROR, DELETE_FAMILY_MEMBERS_SUCCESS, FETCH_ACTIVE_SECTIONS, ADD_ROW_FAMILY, SUBMIT_STUDENT_SECTION,
+  SELECTED_STUDENT_ROW, SELECTED_ROLE
 } from './action-types'
 
 import { get, post, put } from 'axios'
@@ -53,13 +54,16 @@ export const fetchStudentsLists = () => (dispatch, getState, axiosMethod) => {
     .catch(err => dispatch({ type: FETCH_STUDENTS_ERROR, payload: err }))
 }
 
-export const saveStudentList = () => (dispatch, getState, axiosMethod) => {
+export const saveStudentList = (studentObj) => (dispatch, getState, axiosMethod) => {
+  const body ={
+    firstName: studentObj.firstName,
+    lastName: studentObj.lastName,
+    dateOfBirth: studentObj.dateOfBirth,
+  }
   dispatch({ type: SET_STUDENT_LIST })
-  return post(`${config.domains.restService}${config.services.students}`, body, postOptions(data))
-    .then(json => dispatch({ type: SET_STUDENT_LIST_SUCCESS, payload: { sectionId: sectionId, questionId: questionId, json: json } }))
-    .catch(err => {
-      dispatch({ type: SET_STUDENT_LIST_ERROR, payload: { sectionId: sectionId, questionId: questionId, err: err, policyNum: data.policyNum } })
-    })
+  return post(`${config.domains.restService}${config.services.students}`, body, postOptions(body))
+    .then(json => dispatch({ type: SET_STUDENT_LIST_SUCCESS, payload: json }))
+    .catch(err => dispatch({ type: SET_STUDENT_LIST_ERROR, payload: err }))
 }
 
 export const updateStudentData = (firstName, lastName, dateOfBirth, studentId) => (dispatch, getState, axiosMethod) => {
@@ -160,3 +164,26 @@ export const deleteFamilyMembers = (familyId) => (dispatch, getState, axiosMetho
     .then(response => dispatch({ type: DELETE_FAMILY_MEMBERS_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: DELETE_FAMILY_MEMBERS_ERROR, payload: { err: err, body: body } }))
 }
+
+export const updateActiveSectionId = (activeSectionId) => ({
+  type: FETCH_ACTIVE_SECTIONS,
+  payload: activeSectionId
+})
+
+export const addFamilyRow = () => ({
+  type: ADD_ROW_FAMILY
+})
+
+export const submitSectionStudent = (value) => ({
+  type: SUBMIT_STUDENT_SECTION,
+  payload: value
+})
+export const selectedStudentRow = (rowValues) => ({
+  type: SELECTED_STUDENT_ROW,
+  payload: rowValues
+})
+
+export const roleSelected = (value) => ({
+  type: SELECTED_ROLE,
+  payload: value
+})

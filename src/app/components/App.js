@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import ApplicationContainer from './ApplicationContainer/ApplicationContainer'
 
 class App extends React.Component {
@@ -19,7 +18,4 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (reduxState) => {
-  return Object.assign({}, {})
-}
-export default connect(mapStateToProps)(App)
+export default App
