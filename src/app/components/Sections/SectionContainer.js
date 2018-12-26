@@ -69,7 +69,7 @@ class SectionContainer extends React.Component {
           <h3>Family Information:</h3>
           <br />
           <div className='addFamilyButton'>
-            <a className="btn btn-primary" onClick={this.showResults}>Add Family Member</a>
+            <a className="btn btn-primary" onClick={this.showResults} disabled={this.props.addButtonTask || !this.props.isRegistar}>Add Family Member</a>
           </div>
           { this.state.showResults ? <FamilySection {...this.props}
             dispatch={this.props.dispatch}

@@ -16,14 +16,15 @@ import {
   UPDATE_FAMILY_MEMBER_NATIONALITY_ERROR,
   FAMILY_NATIONALITY_INDICATOR,
   DELETE_FAMILY_MEMBERS,
-  DELETE_FAMILY_MEMBERS_SUCCESS, DELETE_FAMILY_MEMBERS_ERROR
+  DELETE_FAMILY_MEMBERS_SUCCESS, DELETE_FAMILY_MEMBERS_ERROR, ADD_FAMILY_BUTTON
 } from '../actions/action-types'
 import {cloneDeep, findIndex, find} from 'lodash'
 
 export const initialState = {
   familyNationality: null,
   studentFamilyMember: [],
-  familyNationalityIndicator: null
+  familyNationalityIndicator: null,
+  addButtonTask: true
 }
 
 export default (state = initialState, {type, payload, meta}) => {
@@ -147,6 +148,10 @@ export default (state = initialState, {type, payload, meta}) => {
         hasError: true,
         error: payload,
         isFetching: false
+      })
+    case ADD_FAMILY_BUTTON:
+      return Object.assign({}, state, {
+        addButtonTask: payload
       })
     default:
       return state

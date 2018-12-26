@@ -8,7 +8,7 @@ import {
   disableNationalityOnAdd,
   submitButtonValue,
   fetchNationalityForStudents,
-  fetchFamilyMembersForStudents
+  fetchFamilyMembersForStudents, addFamilyMemberButton
 } from '../../store/actions/action-creators'
 import connect from 'react-redux/es/connect/connect'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
@@ -26,18 +26,17 @@ class ApplicationContainer extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(fetchStudentsLists())
-    this.props.dispatch(roleSelected(false))
     this.props.dispatch(submitSectionStudent(true))
   }
 
   setActiveSection() {
     this.props.dispatch(selectedStudentRow(null))
     this.props.dispatch(submitSectionStudent(false))
-    this.props.dispatch(roleSelected(true))
     this.props.dispatch(disableNationalityOnAdd(true))
     this.props.dispatch(submitButtonValue('Save Changes'))
     this.props.dispatch(fetchNationalityForStudents(0))
     this.props.dispatch(fetchFamilyMembersForStudents(0))
+    this.props.dispatch(addFamilyMemberButton(true))
   }
 
   onRowClick(row){
@@ -47,6 +46,7 @@ class ApplicationContainer extends React.Component {
     this.props.dispatch(submitButtonValue('Update Changes'))
     this.props.dispatch(fetchNationalityForStudents(row.ID))
     this.props.dispatch(fetchFamilyMembersForStudents(row.ID))
+    this.props.dispatch(addFamilyMemberButton(false))
     $('#myModal').modal('show')
   }
 
@@ -55,17 +55,19 @@ class ApplicationContainer extends React.Component {
       this.props.dispatch(roleSelected(false))
     } else if (event.target.value === '2') {
       this.props.dispatch(roleSelected(true))
+    } else  {
+      this.props.dispatch(roleSelected(false))
     }
   }
 
   render () {
    const options = {
-      onRowClick: this.onRowClick
+      onRowClick: this.props.isRegistar ? this.onRowClick : null
     }
 
     return (
       <div className={'Application-container'}>
-        <a data-toggle="modal" href="#myModal" className="btn btn-primary" onClick={this.setActiveSection} >Add Student</a>
+        <a data-toggle="modal" href="#myModal" className="btn btn-primary" onClick={this.setActiveSection} disabled={this.props.isRegistar}>Add Student</a>
         <div className='roleDiv'>
           <label htmlFor="role">Select Role:</label>
           <select id="role" name="role" onChange={this.selectChange} className='ApplicationSelect'>
