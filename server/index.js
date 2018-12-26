@@ -72,9 +72,12 @@ app.put('/api/Students/:id', ({params: {id}, body: {firstName, lastName, dateOfB
 app.get('/api/Students/:studentID/Nationality/',
   ({params: {studentID}}, res) => {
     const studentToUpdate = students.find(({ID}) => ID === parseInt(studentID, 10))
-
-    const {nationality} = studentToUpdate
-    res.send({nationality})
+    if(studentToUpdate) {
+      const {nationality} = studentToUpdate
+      res.send({nationality})
+    } else {
+      res.send({})
+    }
   })
 
 app.put('/api/Students/:studentID/Nationality/:nationalityID',
@@ -92,8 +95,12 @@ app.put('/api/Students/:studentID/Nationality/:nationalityID',
 app.get('/api/Nationalities', (_, res) => res.send(nationalities))
 
 app.get('/api/Students/:studentID/FamilyMembers/', ({params: {studentID}}, res) => {
-  const familyMembersForStudent = students.find(s => s.ID === parseInt(studentID, 10)).familyMembers
-  res.send(familyMembersForStudent)
+  const familyMembersForStudent = students.find(s => s.ID === parseInt(studentID, 10))
+  if(familyMembersForStudent) {
+    res.send(familyMembersForStudent.familyMembers)
+  } else {
+    res.send([])
+  }
 })
 
 app.post('/api/Students/:studentID/FamilyMembers/', (req, res) => {
@@ -141,15 +148,18 @@ app.delete('/api/FamilyMembers/:id',
 
     students[studentIndex].familyMembers.splice(familyMemberIndex, 1)
 
-    res.send('')
+    res.send(students[studentIndex].familyMembers)
   })
 
 app.get('/api/FamilyMembers/:familyMemberID/Nationality/',
   ({params: {familyMemberID}}, res) => {
     const studentToUpdate = students.find(s => s.familyMembers.some(k => k.ID === parseInt(familyMemberID, 10)))
-    const familyMemberToUpdate = studentToUpdate.familyMembers.find(s => s.ID === parseInt(familyMemberID, 10))
-
-    res.send(familyMemberToUpdate.nationality)
+    if(studentToUpdate) {
+      const familyMemberToUpdate = studentToUpdate.familyMembers.find(s => s.ID === parseInt(familyMemberID, 10))
+      res.send(familyMemberToUpdate.nationality)
+    } else {
+      res.send({})
+    }
   })
 
 app.put('/api/FamilyMembers/:familyMemberID/Nationality/:nationalityID',

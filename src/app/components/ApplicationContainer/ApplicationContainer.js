@@ -3,7 +3,12 @@ import {
   fetchStudentsLists,
   updateActiveSectionId,
   selectedStudentRow,
-  submitSectionStudent, roleSelected
+  submitSectionStudent,
+  roleSelected,
+  disableNationalityOnAdd,
+  submitButtonValue,
+  fetchNationalityForStudents,
+  fetchFamilyMembersForStudents
 } from '../../store/actions/action-creators'
 import connect from 'react-redux/es/connect/connect'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
@@ -22,19 +27,26 @@ class ApplicationContainer extends React.Component {
   componentDidMount() {
     this.props.dispatch(fetchStudentsLists())
     this.props.dispatch(roleSelected(false))
+    this.props.dispatch(submitSectionStudent(true))
   }
 
   setActiveSection() {
-    this.props.dispatch(updateActiveSectionId(1))
     this.props.dispatch(selectedStudentRow(null))
     this.props.dispatch(submitSectionStudent(false))
     this.props.dispatch(roleSelected(true))
+    this.props.dispatch(disableNationalityOnAdd(true))
+    this.props.dispatch(submitButtonValue('Save Changes'))
+    this.props.dispatch(fetchNationalityForStudents(0))
+    this.props.dispatch(fetchFamilyMembersForStudents(0))
   }
 
   onRowClick(row){
-    this.props.dispatch(updateActiveSectionId(1))
     this.props.dispatch(selectedStudentRow(row))
     this.props.dispatch(submitSectionStudent(false))
+    this.props.dispatch(disableNationalityOnAdd(false))
+    this.props.dispatch(submitButtonValue('Update Changes'))
+    this.props.dispatch(fetchNationalityForStudents(row.ID))
+    this.props.dispatch(fetchFamilyMembersForStudents(row.ID))
     $('#myModal').modal('show')
   }
 

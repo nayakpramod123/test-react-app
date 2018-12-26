@@ -9,9 +9,9 @@ const Date = (props) => {
         type="date"
         id={props.type}
         name={props.type}
-        onChange={event=> {this.change(event)}}
+        onChange={event=> {props.change(event)}}
         disabled={props.submitStudentSection || !props.isRegistar}
-        value={props.defaultValue}/>
+        defaultValue={props.defaultValue}/>
     </div>
   )
 }

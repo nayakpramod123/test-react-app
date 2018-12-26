@@ -6,8 +6,8 @@ import {
   FETCH_FAMILY_MEMBER_NATIONALITY_ERROR, FETCH_ALL_NATIONALITIES_SUCCESS, FETCH_ALL_NATIONALITIES_ERROR, SET_STUDENT_LIST_SUCCESS,
   SET_STUDENT_LIST_ERROR, UPDATE_STUDENT_FAMILY_MEMBERS_ERROR, UPDATE_STUDENT_DATA_ERROR, UPDATE_STUDENT_DATA_SUCCESS, UPDATE_STUDENT_FAMILY_MEMBERS, UPDATE_STUDENT_DATA, UPDATE_STUDENT_NATIONALITY,
   SET_FAMILY_MEMBERS_ERROR, SET_FAMILY_MEMBERS_SUCCESS, UPDATE_FAMILY_MEMBER_NATIONALITY_ERROR, UPDATE_FAMILY_MEMBER_NATIONALITY_SUCCESS,
-  DELETE_FAMILY_MEMBERS_ERROR, DELETE_FAMILY_MEMBERS_SUCCESS, FETCH_ACTIVE_SECTIONS, ADD_ROW_FAMILY, SUBMIT_STUDENT_SECTION,
-  SELECTED_STUDENT_ROW, SELECTED_ROLE
+  DELETE_FAMILY_MEMBERS_ERROR, DELETE_FAMILY_MEMBERS_SUCCESS, FETCH_ACTIVE_SECTIONS, FAMILY_NATIONALITY_INDICATOR, SUBMIT_STUDENT_SECTION,
+  SELECTED_STUDENT_ROW, SELECTED_ROLE, NATIONALITY_INDICATOR, SUBMIT_BUTTON_VALUE, ADD_BUTTON_VALUE, SELECTED_FAMILY_ROW
 } from './action-types'
 
 import { get, post, put } from 'axios'
@@ -42,11 +42,6 @@ const deleteOptions = (data) => ({
   }
 })
 
-// todo: add conditional load
-export const fetchInitialState = () => (dispatch) => Promise.all([
-  dispatch(fetchStudentsLists())
-])
-
 export const fetchStudentsLists = () => (dispatch, getState, axiosMethod) => {
   dispatch({ type: FETCH_STUDENTS })
   return get(`${config.domains.restService}${config.services.students}`, fetchOptions)
@@ -66,11 +61,11 @@ export const saveStudentList = (studentObj) => (dispatch, getState, axiosMethod)
     .catch(err => dispatch({ type: SET_STUDENT_LIST_ERROR, payload: err }))
 }
 
-export const updateStudentData = (firstName, lastName, dateOfBirth, studentId) => (dispatch, getState, axiosMethod) => {
+export const updateStudentData = (studentObj, studentId) => (dispatch, getState, axiosMethod) => {
   const body = {
-    'firstName': firstName,
-    'lastName': lastName,
-    'dateOfBirth': dateOfBirth
+    'firstName': studentObj.firstName,
+    'lastName': studentObj.lastName,
+    'dateOfBirth': studentObj.dateOfBirth
   }
 
   dispatch({ type: UPDATE_STUDENT_DATA })
@@ -81,17 +76,13 @@ export const updateStudentData = (firstName, lastName, dateOfBirth, studentId) =
 
 export const fetchNationalityForStudents = (studentId) => (dispatch, getState, axiosMethod) => {
   dispatch({ type: FETCH_STUDENT_NATIONALITY })
-  return get(`${config.domains.restService}${config.services.students}/${id}/Nationality/`, fetchOptions)
+  return get(`${config.domains.restService}${config.services.students}/${studentId}/Nationality/`, fetchOptions)
     .then(json => dispatch({ type: FETCH_STUDENT_NATIONALITY_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_STUDENT_NATIONALITY_ERROR, payload: err }))
 }
 
-export const updateNationalityForStudents = (firstName, lastName, dateOfBirth, studentId, nationalityId) => (dispatch, getState, axiosMethod) => {
-  const body = {
-    'firstName': firstName,
-    'lastName': lastName,
-    'dateOfBirth': dateOfBirth
-  }
+export const updateNationalityForStudents = (studentId, nationalityId) => (dispatch, getState, axiosMethod) => {
+  const body = {}
 
   dispatch({ type: UPDATE_STUDENT_NATIONALITY })
   return put(`${config.domains.restService}${config.services.students}/${studentId}/Nationality/${nationalityId}`, body, putOptions(body))
@@ -101,26 +92,31 @@ export const updateNationalityForStudents = (firstName, lastName, dateOfBirth, s
 
 export const fetchFamilyMembersForStudents = (studentId) => (dispatch, getState, axiosMethod) => {
   dispatch({ type: FETCH_STUDENT_FAMILY_MEMBERS })
-  return axiosMethod(`${config.basePath}/getStudentsFamilyList/${studentId}/FamilyMembers`, fetchOptions)
+  return get(`${config.domains.restService}${config.services.students}/${studentId}/FamilyMembers/`, fetchOptions)
     .then(json => dispatch({ type: FETCH_STUDENT_FAMILY_MEMBERS_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_STUDENT_FAMILY_MEMBERS_ERROR, payload: err }))
 }
 
-export const updateFamilyMembersForStudents = (studentId) => (dispatch, getState, axiosMethod) => {
-  const body = {}
+export const updateFamilyMembers = (familyObj, studentId) => (dispatch, getState, axiosMethod) => {
+  const body = {
+    'firstName': familyObj.firstName,
+    'lastName': familyObj.lastName,
+    'dateOfBirth': familyObj.dateOfBirth,
+    'relationship': familyObj.relationship
+  }
 
   dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS })
-  return get(`${config.domains.restService}${config.services.students}/${studentId}/FamilyMembers/`, fetchOptions)
+  return  post(`${config.domains.restService}${config.services.students}/${studentId}/FamilyMembers/`, body, postOptions(body))
     .then(response => dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS_ERROR, payload: { err: err, body: body } }))
 }
 
-export const updateFamilyMembers = (firstName, lastName, dateOfBirth, relationship, familyId) => (dispatch, getState, axiosMethod) => {
+export const updateFamilyMembersForStudents = (familyObj, familyId) => (dispatch, getState, axiosMethod) => {
   const body = {
-    'firstName': firstName,
-    'lastName': lastName,
-    'dateOfBirth': dateOfBirth,
-    'relationship': relationship
+    'firstName': familyObj.firstName,
+    'lastName': familyObj.lastName,
+    'dateOfBirth': familyObj.dateOfBirth,
+    'relationship': familyObj.relationship
   }
 
   dispatch({ type: SET_FAMILY_MEMBERS })
@@ -131,17 +127,13 @@ export const updateFamilyMembers = (firstName, lastName, dateOfBirth, relationsh
 
 export const fetchNationalityForFamilyMembers = (familyMemberId) => (dispatch, getState, axiosMethod) => {
   dispatch({ type: FETCH_FAMILY_MEMBER_NATIONALITY })
-  return get(`${config.domains.restService}${config.services.familyMembers}/${id}/Nationality/`, fetchOptions)
+  return get(`${config.domains.restService}${config.services.familyMembers}/${familyMemberId}/Nationality/`, fetchOptions)
     .then(json => dispatch({ type: FETCH_FAMILY_MEMBER_NATIONALITY_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_FAMILY_MEMBER_NATIONALITY_ERROR, payload: err }))
 }
 ``
-export const updateNationalityForFamilyMembers = (firstName, lastName, dateOfBirth, familyId, nationalityId) => (dispatch, getState, axiosMethod) => {
-  const body = {
-    'firstName': firstName,
-    'lastName': lastName,
-    'dateOfBirth': dateOfBirth
-  }
+export const updateNationalityForFamilyMembers = (familyId, nationalityId) => (dispatch, getState, axiosMethod) => {
+  const body = {}
 
   dispatch({ type: UPDATE_FAMILY_MEMBER_NATIONALITY })
   return put(`${config.domains.restService}${config.services.familyMembers}/${familyId}/Nationality/${nationalityId}`, body, putOptions(body))
@@ -160,7 +152,7 @@ export const deleteFamilyMembers = (familyId) => (dispatch, getState, axiosMetho
   const body = {}
 
   dispatch({ type: DELETE_FAMILY_MEMBERS })
-  return axios.delete(`${config.domains.restService}${config.services.familyMembers}/${id}`, body, deleteOptions(body))
+  return axios.delete(`${config.domains.restService}${config.services.familyMembers}/${familyId}`, body, deleteOptions(body))
     .then(response => dispatch({ type: DELETE_FAMILY_MEMBERS_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: DELETE_FAMILY_MEMBERS_ERROR, payload: { err: err, body: body } }))
 }
@@ -168,10 +160,6 @@ export const deleteFamilyMembers = (familyId) => (dispatch, getState, axiosMetho
 export const updateActiveSectionId = (activeSectionId) => ({
   type: FETCH_ACTIVE_SECTIONS,
   payload: activeSectionId
-})
-
-export const addFamilyRow = () => ({
-  type: ADD_ROW_FAMILY
 })
 
 export const submitSectionStudent = (value) => ({
@@ -185,5 +173,29 @@ export const selectedStudentRow = (rowValues) => ({
 
 export const roleSelected = (value) => ({
   type: SELECTED_ROLE,
+  payload: value
+})
+
+export const disableNationalityOnAdd = (value) => ({
+  type: NATIONALITY_INDICATOR,
+  payload: value
+})
+export const submitButtonValue = (value) => ({
+  type: SUBMIT_BUTTON_VALUE,
+  payload: value
+})
+
+export const addButtonValue = (value) => ({
+  type: ADD_BUTTON_VALUE,
+  payload: value
+})
+
+export const selectedFamilyRow = (rowValues) => ({
+  type: SELECTED_FAMILY_ROW,
+  payload: rowValues
+})
+
+export const disableNationalityOnAddForFamily = (value) => ({
+  type: FAMILY_NATIONALITY_INDICATOR,
   payload: value
 })
