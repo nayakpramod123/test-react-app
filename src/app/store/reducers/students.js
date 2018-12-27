@@ -2,7 +2,8 @@ import { FETCH_STUDENTS, FETCH_STUDENTS_SUCCESS, FETCH_STUDENTS_ERROR, UPDATE_ST
 UPDATE_STUDENT_DATA_SUCCESS, UPDATE_STUDENT_DATA_ERROR, FETCH_STUDENT_NATIONALITY, FETCH_STUDENT_NATIONALITY_ERROR,
 FETCH_STUDENT_NATIONALITY_SUCCESS,SET_STUDENT_LIST, SET_STUDENT_LIST_ERROR, SET_STUDENT_LIST_SUCCESS,
 UPDATE_STUDENT_NATIONALITY_ERROR, UPDATE_STUDENT_NATIONALITY_SUCCESS,ADD_ROW_FAMILY, SUBMIT_STUDENT_SECTION,SELECTED_STUDENT_ROW,
-  FETCH_ACTIVE_SECTIONS, SELECTED_ROLE, NATIONALITY_INDICATOR, SUBMIT_BUTTON_VALUE, ADD_BUTTON_VALUE, SELECTED_FAMILY_ROW} from '../actions/action-types'
+  FETCH_ACTIVE_SECTIONS, SELECTED_ROLE, NATIONALITY_INDICATOR, SUBMIT_BUTTON_VALUE, ADD_BUTTON_VALUE, SELECTED_FAMILY_ROW,
+  IS_ADD_BUTTON_CLICKED} from '../actions/action-types'
 import {cloneDeep, findIndex, find} from 'lodash'
 import config from 'Config'
 
@@ -20,7 +21,8 @@ export const initialState = {
   nationalityIndicator: null,
   submitButtonValue: '',
   addButtonValue: '',
-  selectedFamilyRow: null
+  selectedFamilyRow: null,
+  isAddButtonClicked: false
 }
 
 export default (state = initialState, {type, payload, meta}) => {
@@ -148,6 +150,10 @@ export default (state = initialState, {type, payload, meta}) => {
     case SELECTED_FAMILY_ROW:
       return Object.assign({}, state, {
         selectedFamilyRow: payload
+      })
+    case IS_ADD_BUTTON_CLICKED:
+      return Object.assign({}, state, {
+        isAddButtonClicked: payload
       })
     default:
       return state

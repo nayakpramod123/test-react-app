@@ -1,10 +1,7 @@
 import React from 'react'
-import '../Sections/SectionContainer.css'
+import '../../styles/entry.css'
 import {
-  saveStudentList,
-  submitSectionStudent,
-  updateFamilyMembers, updateFamilyMembersForStudents, updateNationalityForFamilyMembers,
-  updateStudentData
+  updateFamilyMembers, updateFamilyMembersForStudents, updateNationalityForFamilyMembers
 } from '../../store/actions/action-creators'
 import TextBox from '../Simple/TextBox'
 import Date from '../Simple/Date'
@@ -13,11 +10,16 @@ class FamilySection extends React.Component {
   constructor (props) {
     super(props)
     this.state ={
-      newFamilyData: {}
+      newFamilyData: this.props.selectedFamilyRow ? this.props.selectedFamilyRow : {}
     }
     this.addFamilyChange = this.addFamilyChange.bind(this)
     this.saveData = this.saveData.bind(this)
     this.onFamilyNationalityChange = this.onFamilyNationalityChange.bind(this)
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedFamilyRow !== this.props.selectedFamilyRow) {
+      this.setState({ newFamilyData: nextProps.newFamilyData });
+    }
   }
   onFamilyNationalityChange(event) {
     this.props.dispatch(updateNationalityForFamilyMembers(this.props.selectedFamilyRow ? this.props.selectedFamilyRow.ID : '', event.target.value))
@@ -51,40 +53,35 @@ class FamilySection extends React.Component {
         text: 'Spouse'
       }
     ]
+    const validationCheck = this.state.newFamilyData ? this.state.newFamilyData.firstName && this.state.newFamilyData.lastName && this.state.newFamilyData.dateOfBirth : true
     return (
       <div >
-        <TextBox
+        <TextBox {...this.props}
           change={this.addFamilyChange}
           labelText='First Name'
           type='firstName'
           placeHolder='Your first name..'
-          submitStudentSection={this.props.submitStudentSection}
-          isRegistar={this.props.isRegistar}
-          defaultValue={this.props.selectedFamilyRow ? this.props.selectedFamilyRow.firstName : ''}
+          defaultValue={this.state.newFamilyData ? this.state.newFamilyData.firstName : ''}
         />
-        <TextBox
+        <TextBox {...this.props}
           change={this.addFamilyChange}
           labelText='Last Name'
           type='lastName'
           placeHolder='Your last name..'
-          submitStudentSection={this.props.submitStudentSection}
-          isRegistar={this.props.isRegistar}
-          defaultValue={this.props.selectedFamilyRow ? this.props.selectedFamilyRow.lastName : ''}
+          defaultValue={this.state.newFamilyData ? this.state.newFamilyData.lastName : ''}
         />
-        <Date
+        <Date {...this.props}
           change={this.addFamilyChange}
           labelText='Date Of Birth'
           type='dateOfBirth'
-          submitStudentSection={this.props.submitStudentSection}
-          isRegistar={this.props.isRegistar}
-          defaultValue={this.props.selectedFamilyRow ? this.props.selectedFamilyRow.dateOfBirth : ''}
+          defaultValue={this.state.newFamilyData ? this.state.newFamilyData.dateOfBirth : ''}
         />
 
         <label htmlFor="relationship">Relation</label>
         <select id="relationship" name="relationship" onChange={this.addFamilyChange}>
           <option value="0">-- Select --</option>
           {relationShips.map(relation => {
-            return <option value={relation.value} selected={this.props.selectedFamilyRow ? this.props.selectedFamilyRow.relationship === relation.value : false}>{relation.text}</option>
+            return <option value={relation.value} selected={this.state.newFamilyData.relationship === relation.value}>{relation.text}</option>
           })}
         </select>
 
@@ -104,7 +101,7 @@ class FamilySection extends React.Component {
           <a href="#" onClick={this.props.hideResults} className="btn">Close</a>
           <a className="btn btn-primary"
              name={this.props.addButtonValue}
-             disabled={this.props.submitStudentSection || !this.props.isRegistar}
+             disabled={this.props.submitStudentSection || !this.props.isRegistar || !validationCheck}
           onClick={this.saveData}>{this.props.addButtonValue}</a>
         </div>
       </div>

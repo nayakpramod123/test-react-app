@@ -1,20 +1,19 @@
 import React from 'react'
 import {
   fetchStudentsLists,
-  updateActiveSectionId,
   selectedStudentRow,
   submitSectionStudent,
   roleSelected,
   disableNationalityOnAdd,
   submitButtonValue,
   fetchNationalityForStudents,
-  fetchFamilyMembersForStudents, addFamilyMemberButton
+  fetchFamilyMembersForStudents, addFamilyMemberButton, isAddButtonClicked
 } from '../../store/actions/action-creators'
 import connect from 'react-redux/es/connect/connect'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 import Modal from '../Modal/Modal'
-import './ApplicationContainer.css'
+import '../../styles/entry.css'
 
 class ApplicationContainer extends React.Component {
   constructor (props) {
@@ -37,6 +36,8 @@ class ApplicationContainer extends React.Component {
     this.props.dispatch(fetchNationalityForStudents(0))
     this.props.dispatch(fetchFamilyMembersForStudents(0))
     this.props.dispatch(addFamilyMemberButton(true))
+    this.props.dispatch(roleSelected(false))
+    this.props.dispatch(isAddButtonClicked(true))
   }
 
   onRowClick(row){
@@ -47,6 +48,7 @@ class ApplicationContainer extends React.Component {
     this.props.dispatch(fetchNationalityForStudents(row.ID))
     this.props.dispatch(fetchFamilyMembersForStudents(row.ID))
     this.props.dispatch(addFamilyMemberButton(false))
+    this.props.dispatch(isAddButtonClicked(false))
     $('#myModal').modal('show')
   }
 
@@ -55,6 +57,7 @@ class ApplicationContainer extends React.Component {
       this.props.dispatch(roleSelected(false))
     } else if (event.target.value === '2') {
       this.props.dispatch(roleSelected(true))
+      this.props.dispatch(isAddButtonClicked(false))
     } else  {
       this.props.dispatch(roleSelected(false))
     }
@@ -62,19 +65,20 @@ class ApplicationContainer extends React.Component {
 
   render () {
    const options = {
-      onRowClick: this.props.isRegistar ? this.onRowClick : null
+      onRowClick: this.onRowClick
     }
 
     return (
-      <div className={'Application-container'}>
-        <a data-toggle="modal" href="#myModal" className="btn btn-primary" onClick={this.setActiveSection} disabled={this.props.isRegistar}>Add Student</a>
-        <div className='roleDiv'>
-          <label htmlFor="role">Select Role:</label>
-          <select id="role" name="role" onChange={this.selectChange} className='ApplicationSelect'>
-            <option value="0">-- Select --</option>
-            <option value="1">Admin</option>
-            <option value="2">Registrar</option>
-          </select>
+      <div className='Application-container'>
+        <div>
+          <a data-toggle="modal" href="#myModal" className="btn btn-primary addButton" onClick={this.setActiveSection} disabled={this.props.isRegistar}>Add Student</a>
+          <div className='roleDiv'>
+            <label htmlFor="role">Select Role:&nbsp;</label>
+            <select id="role" name="role" onChange={this.selectChange} className='ApplicationSelect'>
+              <option value="1">Admin</option>
+              <option value="2">Registrar</option>
+            </select>
+          </div>
         </div>
         <Modal
           selectedStudentData={this.props.selectedStudentData}

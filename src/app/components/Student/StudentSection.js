@@ -1,5 +1,5 @@
 import React from 'react'
-import '../Sections/SectionContainer.css'
+import '../../styles/entry.css'
 import TextBox from '../Simple/TextBox'
 import Date from '../Simple/Date'
 import {
@@ -13,17 +13,20 @@ class StudentSection extends React.Component {
   constructor (props) {
     super(props)
     this.state ={
-      newStudentData: {}
+      newStudentData: this.props.selectedStudentData ? this.props.selectedStudentData : {}
     }
     this.change = this.change.bind(this)
     this.saveData = this.saveData.bind(this)
     this.onNationalityChange = this.onNationalityChange.bind(this)
   }
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedStudentData !== this.props.selectedStudentData) {
+      this.setState({ newStudentData: nextProps.selectedStudentData });
+    }
   }
   change(event) {
     this.props.dispatch(submitSectionStudent(false))
-    let newData = this.state.newStudentData
+    let newData = this.state.newStudentData ? this.state.newStudentData : {}
     newData[event.target.name] = event.target.value
     this.setState({newStudentData: newData})
   }
@@ -37,38 +40,33 @@ class StudentSection extends React.Component {
       this.props.dispatch(submitSectionStudent(true))
     } else if (event.target.name === 'Update Changes') {
       this.props.dispatch(updateStudentData(this.state.newStudentData, this.props.selectedStudentData ? this.props.selectedStudentData.ID : ''))
+      $('#myModal').modal('hide')
     }
-    $('#myModal').modal('hide')
   }
   render () {
+    const validationCheck = this.state.newStudentData ? this.state.newStudentData.firstName && this.state.newStudentData.lastName && this.state.newStudentData.dateOfBirth : true
     return (
       <div >
-        <TextBox
+        <TextBox {...this.props}
           change={this.change}
           labelText='First Name'
           type='firstName'
           placeHolder='Your first name..'
-          submitStudentSection={this.props.submitStudentSection}
-          isRegistar={this.props.isRegistar}
-          defaultValue={this.props.selectedStudentData ? this.props.selectedStudentData.firstName : ''}
+          defaultValue={this.state.newStudentData ? this.state.newStudentData.firstName : ''}
         />
-        <TextBox
+        <TextBox {...this.props}
           change={this.change}
           labelText='Last Name'
           type='lastName'
           placeHolder='Your last name..'
-          submitStudentSection={this.props.submitStudentSection}
-          isRegistar={this.props.isRegistar}
-          defaultValue={this.props.selectedStudentData ? this.props.selectedStudentData.lastName : ''}
+          defaultValue={this.state.newStudentData ?this.state.newStudentData.lastName : ''}
         />
 
-        <Date
+        <Date {...this.props}
           change={this.change}
           labelText='Date Of Birth'
           type='dateOfBirth'
-          submitStudentSection={this.props.submitStudentSection}
-          isRegistar={this.props.isRegistar}
-          defaultValue={this.props.selectedStudentData ? this.props.selectedStudentData.dateOfBirth : ''}
+          defaultValue={this.state.newStudentData ?this.state.newStudentData.dateOfBirth : ''}
         />
 
         <label htmlFor="nationality">Nationality</label>
@@ -83,8 +81,8 @@ class StudentSection extends React.Component {
           })}
         </select>
         <div className="modal-footer studentFooter">
-          <a href="#" data-dismiss="modal" className="btn">Close</a>
-          <a href="#" className="btn btn-primary" name={this.props.submitButtonValue} onClick={this.saveData} disabled={this.props.submitStudentSection || !this.props.isRegistar}>{this.props.submitButtonValue}</a>
+          <a href="#" data-dismiss="modal" className="btn btn-primary">Cancel</a>
+          <a href="#" className="btn btn-primary" name={this.props.submitButtonValue} onClick={this.saveData} disabled={this.props.submitStudentSection || (!this.props.isRegistar && !this.props.isAddButtonClicked) || !validationCheck}>{this.props.submitButtonValue}</a>
         </div>
       </div>
     )

@@ -11,8 +11,10 @@ class App extends React.Component {
 
   render () {
     return (
-      <div className={'Application'}>
-        <ApplicationContainer dispatch={this.props.dispatch} />
+      <div className='card'>
+        <div className='card-body'>
+          <ApplicationContainer dispatch={this.props.dispatch} />
+        </div>
       </div>
     )
   }

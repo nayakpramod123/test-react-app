@@ -23,17 +23,20 @@ const nationalities = [{
   Title: 'USA'
 }]
 
+const dateValue =  new Date()
+const dateFormat = dateValue.getFullYear() + '-' + (dateValue.getMonth() + 1) + '-' + dateValue.getDate()
+
 let students = [{
   ID: 1,
   firstName: 'John',
   lastName: 'Doe',
-  dateOfBirth: new Date().toISOString(),
+  dateOfBirth: dateFormat,
   nationality: nationalities[0],
   familyMembers: [{
     ID: 1,
     firstName: 'James',
     lastName: 'Doe',
-    dateOfBirth: new Date().toISOString(),
+    dateOfBirth: dateFormat,
     relationship: 'Parent',
     nationality: nationalities[0]
   }]

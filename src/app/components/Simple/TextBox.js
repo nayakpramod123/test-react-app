@@ -10,9 +10,9 @@ const TextBox = (props) => {
         id={props.type}
         name={props.type}
         placeholder={props.placeHolder}
-        onChange={event=> {props.change(event)}}
-        disabled={props.submitStudentSection || !props.isRegistar}
-        defaultValue={props.defaultValue}/>
+        onChange={props.change}
+        disabled={props.submitStudentSection || (!props.isRegistar && !props.isAddButtonClicked)}
+        value={props.defaultValue}/>
     </div>
   )
 }

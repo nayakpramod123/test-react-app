@@ -58,7 +58,8 @@ const mapStateToProps = (state) => {
     selectedFamilyRow: state.students.selectedFamilyRow,
     familyNationality: state.familyMembers.familyNationality,
     familyNationalityIndicator: state.familyMembers.familyNationalityIndicator,
-    addButtonTask: state.familyMembers.addButtonTask
+    addButtonTask: state.familyMembers.addButtonTask,
+    isAddButtonClicked: state.students.isAddButtonClicked
   })
 }
 export default connect(mapStateToProps)(Modal)

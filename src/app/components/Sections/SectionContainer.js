@@ -1,5 +1,5 @@
 import React from 'react'
-import './SectionContainer.css'
+import '../../styles/entry.css'
 import FamilySection from '../Family/FamilySection'
 import StudentSection from '../Student/StudentSection'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
@@ -7,7 +7,6 @@ import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 import {
   addButtonValue,
   deleteFamilyMembers,
-  disableNationalityOnAdd,
   disableNationalityOnAddForFamily,
   fetchNationalityForFamilyMembers,
   selectedFamilyRow
@@ -76,7 +75,7 @@ class SectionContainer extends React.Component {
             hideResults = {this.hideResults}
             optionState={this.props.familyNationality ? this.props.familyNationality.ID ? this.props.familyNationality.ID : '0' : '0'}
           /> : null }
-          <BootstrapTable data={this.props.studentFamilyMember} deleteRow={ true } selectRow={ selectRowProp } options={ options } remote={ true } striped hover version='4'>
+          <BootstrapTable data={this.props.studentFamilyMember ? this.props.studentFamilyMember : []} deleteRow={ true } selectRow={ selectRowProp } options={ options } remote={ true } striped hover version='4'>
             <TableHeaderColumn isKey dataField='ID'>ID</TableHeaderColumn>
             <TableHeaderColumn dataField='firstName'>First Name</TableHeaderColumn>
             <TableHeaderColumn dataField='lastName'>Last Name</TableHeaderColumn>

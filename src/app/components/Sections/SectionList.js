@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import './SectionList.css'
+import '../../styles/entry.css'
 
 const SectionList = ({activeSectionId, filteredSections, updateActive}) => {
   const sections = filteredSections.map((item, index) => {

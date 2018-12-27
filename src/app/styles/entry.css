@@ -1,0 +1,81 @@
+body {
+  margin: 0 auto;
+  background: white;
+}
+
+#app{
+  flex: 1 0 auto;
+  letter-spacing: .03125rem;
+  background-color: white;
+  min-height: 100rem;
+  color: black;
+}
+
+h1{
+  font-size:1rem;
+}
+h3{
+  font-size:1.4rem;
+  font-weight: 400;
+}
+h5{
+  font-size:1rem;
+  font-weight: 400;
+}
+
+.hidden{
+  visibility: hidden;
+}
+
+input[type=text], input[type=date], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.addFamilyButton {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.card{
+    box-shadow:none;
+}
+
+select[disabled], .bootStrapTable[disabled]{
+  background-color: #EBEBE4;
+}
+
+.ApplicationSelect {
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 50%;
+}
+.roleDiv {
+  float:right;
+  display:inline-block;
+  width: 20%
+}
+.Application-container {
+  padding-top: 1rem;
+}
+.active {
+    pointer-events: none;
+    opacity: 0.6;
+    border-bottom: solid black 2px;
+}
+.sectionDiv {
+    display: inline-block;
+    border-right: 1px solid black;
+    padding-left: 0.5rem;
+    cursor: pointer;
+}
+.addButton {
+    margin-top: 1.5rem;
+}
