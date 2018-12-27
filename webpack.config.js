@@ -9,7 +9,7 @@ module.exports = {
   },
   devServer: {
     inline: true,
-    port: 9093
+    port: 3000
   },
   node: {
     fs: 'empty'
