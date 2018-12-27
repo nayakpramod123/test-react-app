@@ -34,7 +34,6 @@ class SectionContainer extends React.Component {
   }
 
   deleteRow(next, dropRowKeys) {
-    console.log('Delete Row: ', dropRowKeys[0])
     this.props.dispatch(deleteFamilyMembers(dropRowKeys[0]))
   }
 

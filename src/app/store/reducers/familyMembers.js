@@ -18,7 +18,7 @@ import {
   DELETE_FAMILY_MEMBERS,
   DELETE_FAMILY_MEMBERS_SUCCESS, DELETE_FAMILY_MEMBERS_ERROR, ADD_FAMILY_BUTTON
 } from '../actions/action-types'
-import {cloneDeep, findIndex, find} from 'lodash'
+import {cloneDeep, findIndex} from 'lodash'
 
 export const initialState = {
   familyNationality: null,
@@ -27,7 +27,7 @@ export const initialState = {
   addButtonTask: true
 }
 
-export default (state = initialState, {type, payload, meta}) => {
+export default (state = initialState, {type, payload}) => {
   switch (type) {
     case FETCH_FAMILY_MEMBER_NATIONALITY:
       return state
@@ -122,7 +122,6 @@ export default (state = initialState, {type, payload, meta}) => {
         isFetching: false
       })
     case UPDATE_FAMILY_MEMBER_NATIONALITY_SUCCESS:
-      console.log(payload.data)
       return Object.assign({}, state, {
         studentFamilyMember: payload.data,
         isFetching: false

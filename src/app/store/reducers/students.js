@@ -4,7 +4,7 @@ FETCH_STUDENT_NATIONALITY_SUCCESS,SET_STUDENT_LIST, SET_STUDENT_LIST_ERROR, SET_
 UPDATE_STUDENT_NATIONALITY_ERROR, UPDATE_STUDENT_NATIONALITY_SUCCESS,ADD_ROW_FAMILY, SUBMIT_STUDENT_SECTION,SELECTED_STUDENT_ROW,
   FETCH_ACTIVE_SECTIONS, SELECTED_ROLE, NATIONALITY_INDICATOR, SUBMIT_BUTTON_VALUE, ADD_BUTTON_VALUE, SELECTED_FAMILY_ROW,
   IS_ADD_BUTTON_CLICKED} from '../actions/action-types'
-import {cloneDeep, findIndex, find} from 'lodash'
+import {cloneDeep, findIndex} from 'lodash'
 import config from 'Config'
 
 export const initialState = {
@@ -25,8 +25,7 @@ export const initialState = {
   isAddButtonClicked: false
 }
 
-export default (state = initialState, {type, payload, meta}) => {
-  let stateData
+export default (state = initialState, {type, payload}) => {
   switch (type) {
     case FETCH_STUDENTS:
       return Object.assign({}, state, {
@@ -35,11 +34,8 @@ export default (state = initialState, {type, payload, meta}) => {
         error: null
       })
     case SET_STUDENT_LIST:
-      return state
     case UPDATE_STUDENT_DATA:
-      return state
     case FETCH_STUDENT_NATIONALITY:
-      return state
     case UPDATE_STUDENT_NATIONALITY:
       return state
     case FETCH_STUDENTS_ERROR:

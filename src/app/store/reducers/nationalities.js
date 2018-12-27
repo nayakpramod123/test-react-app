@@ -1,5 +1,4 @@
 import { FETCH_ALL_NATIONALITIES, FETCH_ALL_NATIONALITIES_SUCCESS, FETCH_ALL_NATIONALITIES_ERROR} from '../actions/action-types'
-import config from 'Config'
 
 export const initialState = {
   nationalities: [],
@@ -8,7 +7,7 @@ export const initialState = {
   error: null
 }
 
-export default (state = initialState, {type, payload, meta}) => {
+export default (state = initialState, {type, payload}) => {
   switch (type) {
     case FETCH_ALL_NATIONALITIES:
       return Object.assign({}, state, {

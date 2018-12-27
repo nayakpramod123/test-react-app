@@ -14,7 +14,6 @@ import {
 import { get, post, put } from 'axios'
 import axios from 'axios'
 import config from 'Config'
-import { update, find } from 'lodash'
 
 const fetchOptions = { credentials: 'include' }
 const postOptions = (data) => ({
@@ -43,14 +42,14 @@ const deleteOptions = (data) => ({
   }
 })
 
-export const fetchStudentsLists = () => (dispatch, getState, axiosMethod) => {
+export const fetchStudentsLists = () => (dispatch) => {
   dispatch({ type: FETCH_STUDENTS })
   return get(`${config.domains.restService}${config.services.students}`, fetchOptions)
     .then(json => dispatch({ type: FETCH_STUDENTS_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_STUDENTS_ERROR, payload: err }))
 }
 
-export const saveStudentList = (studentObj) => (dispatch, getState, axiosMethod) => {
+export const saveStudentList = (studentObj) => (dispatch) => {
   const body ={
     firstName: studentObj.firstName,
     lastName: studentObj.lastName,
@@ -62,7 +61,7 @@ export const saveStudentList = (studentObj) => (dispatch, getState, axiosMethod)
     .catch(err => dispatch({ type: SET_STUDENT_LIST_ERROR, payload: err }))
 }
 
-export const updateStudentData = (studentObj, studentId) => (dispatch, getState, axiosMethod) => {
+export const updateStudentData = (studentObj, studentId) => (dispatch) => {
   const body = {
     'firstName': studentObj.firstName,
     'lastName': studentObj.lastName,
@@ -75,14 +74,14 @@ export const updateStudentData = (studentObj, studentId) => (dispatch, getState,
     .catch(err => dispatch({ type: UPDATE_STUDENT_DATA_ERROR, payload: { err: err, body: body } }))
 }
 
-export const fetchNationalityForStudents = (studentId) => (dispatch, getState, axiosMethod) => {
+export const fetchNationalityForStudents = (studentId) => (dispatch) => {
   dispatch({ type: FETCH_STUDENT_NATIONALITY })
   return get(`${config.domains.restService}${config.services.students}/${studentId}/Nationality/`, fetchOptions)
     .then(json => dispatch({ type: FETCH_STUDENT_NATIONALITY_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_STUDENT_NATIONALITY_ERROR, payload: err }))
 }
 
-export const updateNationalityForStudents = (studentId, nationalityId) => (dispatch, getState, axiosMethod) => {
+export const updateNationalityForStudents = (studentId, nationalityId) => (dispatch) => {
   const body = {}
 
   dispatch({ type: UPDATE_STUDENT_NATIONALITY })
@@ -91,14 +90,14 @@ export const updateNationalityForStudents = (studentId, nationalityId) => (dispa
     .catch(err => dispatch({ type: UPDATE_STUDENT_NATIONALITY_ERROR, payload: { err: err, body: body } }))
 }
 
-export const fetchFamilyMembersForStudents = (studentId) => (dispatch, getState, axiosMethod) => {
+export const fetchFamilyMembersForStudents = (studentId) => (dispatch) => {
   dispatch({ type: FETCH_STUDENT_FAMILY_MEMBERS })
   return get(`${config.domains.restService}${config.services.students}/${studentId}/FamilyMembers/`, fetchOptions)
     .then(json => dispatch({ type: FETCH_STUDENT_FAMILY_MEMBERS_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_STUDENT_FAMILY_MEMBERS_ERROR, payload: err }))
 }
 
-export const updateFamilyMembers = (familyObj, studentId) => (dispatch, getState, axiosMethod) => {
+export const updateFamilyMembers = (familyObj, studentId) => (dispatch) => {
   const body = {
     'firstName': familyObj.firstName,
     'lastName': familyObj.lastName,
@@ -112,7 +111,7 @@ export const updateFamilyMembers = (familyObj, studentId) => (dispatch, getState
     .catch(err => dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS_ERROR, payload: { err: err, body: body } }))
 }
 
-export const updateFamilyMembersForStudents = (familyObj, familyId) => (dispatch, getState, axiosMethod) => {
+export const updateFamilyMembersForStudents = (familyObj, familyId) => (dispatch) => {
   const body = {
     'firstName': familyObj.firstName,
     'lastName': familyObj.lastName,
@@ -126,14 +125,14 @@ export const updateFamilyMembersForStudents = (familyObj, familyId) => (dispatch
     .catch(err => dispatch({ type: SET_FAMILY_MEMBERS_ERROR, payload: { err: err, body: body } }))
 }
 
-export const fetchNationalityForFamilyMembers = (familyMemberId) => (dispatch, getState, axiosMethod) => {
+export const fetchNationalityForFamilyMembers = (familyMemberId) => (dispatch) => {
   dispatch({ type: FETCH_FAMILY_MEMBER_NATIONALITY })
   return get(`${config.domains.restService}${config.services.familyMembers}/${familyMemberId}/Nationality/`, fetchOptions)
     .then(json => dispatch({ type: FETCH_FAMILY_MEMBER_NATIONALITY_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_FAMILY_MEMBER_NATIONALITY_ERROR, payload: err }))
 }
 ``
-export const updateNationalityForFamilyMembers = (familyId, nationalityId) => (dispatch, getState, axiosMethod) => {
+export const updateNationalityForFamilyMembers = (familyId, nationalityId) => (dispatch) => {
   const body = {}
 
   dispatch({ type: UPDATE_FAMILY_MEMBER_NATIONALITY })
@@ -142,14 +141,14 @@ export const updateNationalityForFamilyMembers = (familyId, nationalityId) => (d
     .catch(err => dispatch({ type: UPDATE_FAMILY_MEMBER_NATIONALITY_ERROR, payload: { err: err, body: body } }))
 }
 
-export const fetchAllNationalities = () => (dispatch, getState, axiosMethod) => {
+export const fetchAllNationalities = () => (dispatch) => {
   dispatch({ type: FETCH_ALL_NATIONALITIES })
   return get(`${config.domains.restService}${config.services.nationalities}`, fetchOptions)
     .then(json => dispatch({ type: FETCH_ALL_NATIONALITIES_SUCCESS, payload: json }))
     .catch(err => dispatch({ type: FETCH_ALL_NATIONALITIES_ERROR, payload: err }))
 }
 
-export const deleteFamilyMembers = (familyId) => (dispatch, getState, axiosMethod) => {
+export const deleteFamilyMembers = (familyId) => (dispatch) => {
   const body = {}
 
   dispatch({ type: DELETE_FAMILY_MEMBERS })

@@ -1,5 +1,6 @@
 import React from 'react'
 import ApplicationContainer from './ApplicationContainer/ApplicationContainer'
+import PropTypes from 'prop-types'
 
 class App extends React.Component {
   constructor (props) {
@@ -18,6 +19,10 @@ class App extends React.Component {
       </div>
     )
   }
+}
+
+App.propTypes = {
+  dispatch: PropTypes.func.isRequired
 }
 
 export default App

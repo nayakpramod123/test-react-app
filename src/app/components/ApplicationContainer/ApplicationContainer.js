@@ -14,6 +14,7 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 import Modal from '../Modal/Modal'
 import '../../styles/entry.css'
+import PropTypes from 'prop-types'
 
 class ApplicationContainer extends React.Component {
   constructor (props) {
@@ -102,4 +103,11 @@ const mapStateToProps = (state) => {
     isRegistar: state.students.isRegistar
   })
 }
+ApplicationContainer.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  isRegistar: PropTypes.bool,
+  selectedStudentData: PropTypes.object,
+  studentData: PropTypes.array,
+}
+
 export default connect(mapStateToProps)(ApplicationContainer)

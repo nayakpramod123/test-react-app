@@ -16,16 +16,6 @@ class Modal extends React.Component {
   }
 
   render() {
-    const filteredSections =[
-      {
-        id: 1,
-        displayName:'Basic Information'
-      },
-      {
-        id: 2,
-        displayName: 'Family Information'
-      }
-    ]
     return (
       <div>
         <div className="modal fade" id="myModal">

@@ -77,7 +77,7 @@ class StudentSection extends React.Component {
           onChange={this.onNationalityChange}>
           <option value="0">-- Select --</option>
           {this.props.nationalities.map(nationality => {
-            return <option value={nationality.ID} selected={this.props.optionState === nationality.ID}>{nationality.Title}</option>
+            return <option key={nationality.ID} value={nationality.ID} selected={this.props.optionState === nationality.ID}>{nationality.Title}</option>
           })}
         </select>
         <div className="modal-footer studentFooter">

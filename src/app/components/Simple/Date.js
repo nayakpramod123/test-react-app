@@ -9,7 +9,6 @@ const dateFormat = (date) => {
 
 const Date = (props) => {
   let dateFormatValue = props.defaultValue ? dateFormat(props.defaultValue) : ''
-  console.log(dateFormatValue)
   return (
     <div>
       <label htmlFor={props.type}>{props.labelText}</label>
@@ -26,7 +25,13 @@ const Date = (props) => {
 
 Date.propTypes = {
   change: PropTypes.func.isRequired,
-  submitStudentSection: PropTypes.bool
+  submitStudentSection: PropTypes.bool,
+  type: PropTypes.string,
+  labelText: PropTypes.string,
+  placeHolder: PropTypes.string,
+  isRegistar: PropTypes.bool,
+  isAddButtonClicked: PropTypes.bool,
+  defaultValue: PropTypes.string
 }
 
 export default Date
