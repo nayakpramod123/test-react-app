@@ -40,7 +40,7 @@ class StudentSection extends React.Component {
       this.props.dispatch(submitSectionStudent(true))
     } else if (event.target.name === 'Update Changes') {
       this.props.dispatch(updateStudentData(this.state.newStudentData, this.props.selectedStudentData ? this.props.selectedStudentData.ID : ''))
-      $('#myModal').modal('hide')
+      this.props.onCloseModal()
     }
   }
   render () {
@@ -74,14 +74,15 @@ class StudentSection extends React.Component {
           id="nationality"
           name="nationality"
           disabled={this.props.submitStudentSection || !this.props.isRegistar || this.props.nationalityIndicator}
-          onChange={this.onNationalityChange}>
+          onChange={this.onNationalityChange}
+          defaultValue={this.props.optionState}>
           <option value="0">-- Select --</option>
           {this.props.nationalities.map(nationality => {
-            return <option key={nationality.ID} value={nationality.ID} selected={this.props.optionState === nationality.ID}>{nationality.Title}</option>
+            return <option key={nationality.ID} value={nationality.ID} >{nationality.Title}</option>
           })}
         </select>
         <div className="modal-footer studentFooter">
-          <a href="#" data-dismiss="modal" className="btn btn-primary">Cancel</a>
+          <a className="btn btn-primary" onClick={this.props.onCloseModal}>Cancel</a>
           <a href="#" className="btn btn-primary" name={this.props.submitButtonValue} onClick={this.saveData} disabled={this.props.submitStudentSection || (!this.props.isRegistar && !this.props.isAddButtonClicked) || !validationCheck}>{this.props.submitButtonValue}</a>
         </div>
       </div>

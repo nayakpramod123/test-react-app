@@ -2,8 +2,9 @@ import React from 'react';
 import SectionContainer from '../Sections/SectionContainer'
 import connect from 'react-redux/es/connect/connect'
 import { fetchAllNationalities, updateActiveSectionId } from '../../store/actions/action-creators'
+import Modal from 'react-responsive-modal'
 
-class Modal extends React.Component {
+class ModalComponent extends React.Component {
   constructor (props) {
     super(props)
     this.updateActiveSection = this.updateActiveSection.bind(this)
@@ -18,19 +19,10 @@ class Modal extends React.Component {
   render() {
     return (
       <div>
-        <div className="modal fade" id="myModal">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
-              </div>
-              <div className="modal-body">
-                <SectionContainer {...this.props}
-                  dispatch={this.props.dispatch}/>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal open={this.props.open} onClose={this.props.onCloseModal} center>
+          <SectionContainer {...this.props}
+            dispatch={this.props.dispatch}/>
+        </Modal>
       </div>
     );
   }
@@ -52,4 +44,4 @@ const mapStateToProps = (state) => {
     isAddButtonClicked: state.students.isAddButtonClicked
   })
 }
-export default connect(mapStateToProps)(Modal)
+export default connect(mapStateToProps)(ModalComponent)

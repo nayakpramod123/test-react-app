@@ -19,9 +19,17 @@ import PropTypes from 'prop-types'
 class ApplicationContainer extends React.Component {
   constructor (props) {
     super(props)
+    this.state ={
+      open: false
+    }
     this.setActiveSection = this.setActiveSection.bind(this)
     this.onRowClick = this.onRowClick.bind(this)
     this.selectChange= this.selectChange.bind(this)
+    this.onCloseModal= this.onCloseModal.bind(this)
+  }
+
+  onCloseModal() {
+    this.setState({ open: false })
   }
 
   componentDidMount() {
@@ -30,6 +38,7 @@ class ApplicationContainer extends React.Component {
   }
 
   setActiveSection() {
+    this.setState({ open: true })
     this.props.dispatch(selectedStudentRow(null))
     this.props.dispatch(submitSectionStudent(false))
     this.props.dispatch(disableNationalityOnAdd(true))
@@ -50,7 +59,7 @@ class ApplicationContainer extends React.Component {
     this.props.dispatch(fetchFamilyMembersForStudents(row.ID))
     this.props.dispatch(addFamilyMemberButton(false))
     this.props.dispatch(isAddButtonClicked(false))
-    $('#myModal').modal('show')
+    this.setState({ open: true })
   }
 
   selectChange(event) {
@@ -68,11 +77,10 @@ class ApplicationContainer extends React.Component {
    const options = {
       onRowClick: this.onRowClick
     }
-
     return (
       <div className='Application-container'>
         <div>
-          <a data-toggle="modal" href="#myModal" className="btn btn-primary addButton" onClick={this.setActiveSection} disabled={this.props.isRegistar}>Add Student</a>
+          <button className="btn btn-primary addButton" onClick={this.setActiveSection} disabled={this.props.isRegistar}>Add Student</button>
           <div className='roleDiv'>
             <label htmlFor="role">Select Role:&nbsp;</label>
             <select id="role" name="role" onChange={this.selectChange} className='ApplicationSelect'>
@@ -82,6 +90,8 @@ class ApplicationContainer extends React.Component {
           </div>
         </div>
         <Modal
+          open={this.state.open}
+          onCloseModal={this.onCloseModal}
           selectedStudentData={this.props.selectedStudentData}
           isRegistar={this.props.isRegistar}/>
         < br />

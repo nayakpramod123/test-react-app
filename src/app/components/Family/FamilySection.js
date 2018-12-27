@@ -78,10 +78,11 @@ class FamilySection extends React.Component {
         />
 
         <label htmlFor="relationship">Relation</label>
-        <select id="relationship" name="relationship" onChange={this.addFamilyChange}>
+        <select id="relationship" name="relationship" onChange={this.addFamilyChange}
+                defaultValue={this.state.newFamilyData.relationship}>
           <option value="0">-- Select --</option>
           {relationShips.map(relation => {
-            return <option key={relation.value} value={relation.value} selected={this.state.newFamilyData.relationship === relation.value}>{relation.text}</option>
+            return <option key={relation.value} value={relation.value} >{relation.text}</option>
           })}
         </select>
 
@@ -90,15 +91,16 @@ class FamilySection extends React.Component {
           id="nationality"
           name="nationality"
           disabled={!this.props.isRegistar || this.props.familyNationalityIndicator}
-          onChange={this.onFamilyNationalityChange}>
+          onChange={this.onFamilyNationalityChange}
+          defaultValue={this.props.optionState}>
           <option value="0">-- Select --</option>
           {this.props.nationalities.map(nationality => {
-            return <option key={nationality.ID} value={nationality.ID} selected={this.props.optionState === nationality.ID}>{nationality.Title}</option>
+            return <option key={nationality.ID} value={nationality.ID} >{nationality.Title}</option>
           })}
         </select>
         <br />
         <div className="modal-footer familyFooter">
-          <a href="#" onClick={this.props.hideResults} className="btn">Close</a>
+          <a onClick={this.props.hideResults} className="btn btn-primary">Cancel</a>
           <a className="btn btn-primary"
              name={this.props.addButtonValue}
              disabled={this.props.submitStudentSection || !this.props.isRegistar || !validationCheck}
