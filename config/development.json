@@ -8,6 +8,10 @@
   "services": {
     "students":"/api/Students",
     "familyMembers":"/api/FamilyMembers",
-    "nationalities": "/api/Nationalities"
+    "nationalities": "/api/Nationalities",
+    "login": "/login",
+    "setUp": "/twofactor/setup",
+    "verify": "/twofactor/verify",
+    "verifyOtp": "/verifyotp"
   }
 }

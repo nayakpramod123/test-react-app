@@ -19,25 +19,34 @@ import PropTypes from 'prop-types'
 class ApplicationContainer extends React.Component {
   constructor (props) {
     super(props)
-    this.state ={
+    this.state = {
       open: false
     }
     this.setActiveSection = this.setActiveSection.bind(this)
     this.onRowClick = this.onRowClick.bind(this)
-    this.selectChange= this.selectChange.bind(this)
-    this.onCloseModal= this.onCloseModal.bind(this)
+    this.selectChange = this.selectChange.bind(this)
+    this.onCloseModal = this.onCloseModal.bind(this)
+    this.setUp = this.setUp.bind(this)
+    this.logOut = this.logOut.bind(this)
   }
 
-  onCloseModal() {
+  onCloseModal () {
     this.setState({ open: false })
   }
 
-  componentDidMount() {
+  logOut () {
+    this.props.routeProps.history.push('/')
+  }
+
+  setUp () {
+    this.props.routeProps.history.push('/setup')
+  }
+  componentDidMount () {
     this.props.dispatch(fetchStudentsLists())
     this.props.dispatch(submitSectionStudent(true))
   }
 
-  setActiveSection() {
+  setActiveSection () {
     this.setState({ open: true })
     this.props.dispatch(selectedStudentRow(null))
     this.props.dispatch(submitSectionStudent(false))
@@ -50,7 +59,7 @@ class ApplicationContainer extends React.Component {
     this.props.dispatch(isAddButtonClicked(true))
   }
 
-  onRowClick(row){
+  onRowClick (row) {
     this.props.dispatch(selectedStudentRow(row))
     this.props.dispatch(submitSectionStudent(false))
     this.props.dispatch(disableNationalityOnAdd(false))
@@ -62,45 +71,57 @@ class ApplicationContainer extends React.Component {
     this.setState({ open: true })
   }
 
-  selectChange(event) {
+  selectChange (event) {
     if (event.target.value === '1') {
       this.props.dispatch(roleSelected(false))
     } else if (event.target.value === '2') {
       this.props.dispatch(roleSelected(true))
       this.props.dispatch(isAddButtonClicked(false))
-    } else  {
+    } else {
       this.props.dispatch(roleSelected(false))
     }
   }
 
   render () {
-   const options = {
+    const options = {
       onRowClick: this.onRowClick
     }
+    console.log('Props in container: ', this.props)
     return (
       <div className='Application-container'>
-        <div>
-          <button className="btn btn-primary addButton" onClick={this.setActiveSection} disabled={this.props.isRegistar}>Add Student</button>
-          <div className='roleDiv'>
-            <label htmlFor="role">Select Role:&nbsp;</label>
-            <select id="role" name="role" onChange={this.selectChange} className='ApplicationSelect'>
-              <option value="1">Admin</option>
-              <option value="2">Registrar</option>
-            </select>
+        { (this.props.authentication.isVerified && this.props.authentication.otpVerified)
+          ? <div>
+            <div>
+              <button className='btn btn-primary addButton' onClick={this.setActiveSection} disabled={this.props.isRegistar}>Add Student</button>
+              <button className='btn btn-primary addButton' onClick={this.logOut} >Log Out</button>
+              <button className='btn btn-primary addButton' onClick={this.setUp} >Go to Set Up</button>
+              <div className='roleDiv'>
+                <label htmlFor='role'>Select Role:&nbsp;</label>
+                <select id='role' name='role' onChange={this.selectChange} className='ApplicationSelect'>
+                  <option value='1'>Admin</option>
+                  <option value='2'>Registrar</option>
+                </select>
+              </div>
+            </div>
+            <Modal
+              open={this.state.open}
+              onCloseModal={this.onCloseModal}
+              selectedStudentData={this.props.selectedStudentData}
+              isRegistar={this.props.isRegistar} />
+            <br />
+            <BootstrapTable data={this.props.studentData} options={options} remote striped hover version='4'>
+              <TableHeaderColumn isKey dataField='ID'>ID</TableHeaderColumn>
+              <TableHeaderColumn dataField='firstName'>First Name</TableHeaderColumn>
+              <TableHeaderColumn dataField='lastName'>Last Name</TableHeaderColumn>
+              <TableHeaderColumn dataField='dateOfBirth'>Date Of Birth</TableHeaderColumn>
+            </BootstrapTable>
           </div>
-        </div>
-        <Modal
-          open={this.state.open}
-          onCloseModal={this.onCloseModal}
-          selectedStudentData={this.props.selectedStudentData}
-          isRegistar={this.props.isRegistar}/>
-        < br />
-        <BootstrapTable data={this.props.studentData} options={ options } remote={ true } striped hover version='4'>
-          <TableHeaderColumn isKey dataField='ID'>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='firstName'>First Name</TableHeaderColumn>
-          <TableHeaderColumn dataField='lastName'>Last Name</TableHeaderColumn>
-          <TableHeaderColumn dataField='dateOfBirth'>Date Of Birth</TableHeaderColumn>
-        </BootstrapTable>
+          : <div>
+            <label>Verification Failed. Login again to verify your authentication</label>
+            <button className='btn btn-primary addButton' onClick={this.logOut} >Log Out</button>
+          </div>
+        }
+
       </div>
     )
   }
@@ -117,7 +138,7 @@ ApplicationContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isRegistar: PropTypes.bool,
   selectedStudentData: PropTypes.object,
-  studentData: PropTypes.array,
+  studentData: PropTypes.array
 }
 
 export default connect(mapStateToProps)(ApplicationContainer)

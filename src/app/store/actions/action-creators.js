@@ -8,7 +8,9 @@ import {
   SET_FAMILY_MEMBERS_ERROR, SET_FAMILY_MEMBERS_SUCCESS, UPDATE_FAMILY_MEMBER_NATIONALITY_ERROR, UPDATE_FAMILY_MEMBER_NATIONALITY_SUCCESS,
   DELETE_FAMILY_MEMBERS_ERROR, DELETE_FAMILY_MEMBERS_SUCCESS, FETCH_ACTIVE_SECTIONS, FAMILY_NATIONALITY_INDICATOR, SUBMIT_STUDENT_SECTION,
   SELECTED_STUDENT_ROW, SELECTED_ROLE, NATIONALITY_INDICATOR, SUBMIT_BUTTON_VALUE, ADD_BUTTON_VALUE, SELECTED_FAMILY_ROW, ADD_FAMILY_BUTTON,
-  IS_ADD_BUTTON_CLICKED
+  IS_ADD_BUTTON_CLICKED, DELETE_SET_UP, DELETE_SET_UP_ERROR, DELETE_SET_UP_SUCCESS, FETCH_SET_UP, FETCH_SET_UP_ERROR, FETCH_SET_UP_SUCCESS, SET_UP_AUTHENTICATION, SET_UP_AUTHENTICATION_ERROR, SET_UP_AUTHENTICATION_SUCCESS,
+  VERIFY_AUTHENTICATION, VERIFY_AUTHENTICATION_ERROR, VERIFY_AUTHENTICATION_SUCCESS, LOGIN_USER, LOGIN_USER_ERROR, LOGIN_USER_SUCCESS, SAVE_OTP,
+  VERIFY_OTP, VERIFY_OTP_ERROR, VERIFY_OTP_SUCCESS
 } from './action-types'
 
 import { get, post, put } from 'axios'
@@ -50,10 +52,10 @@ export const fetchStudentsLists = () => (dispatch) => {
 }
 
 export const saveStudentList = (studentObj) => (dispatch) => {
-  const body ={
+  const body = {
     firstName: studentObj.firstName,
     lastName: studentObj.lastName,
-    dateOfBirth: studentObj.dateOfBirth,
+    dateOfBirth: studentObj.dateOfBirth
   }
   dispatch({ type: SET_STUDENT_LIST })
   return post(`${config.domains.restService}${config.services.students}`, body, postOptions(body))
@@ -106,7 +108,7 @@ export const updateFamilyMembers = (familyObj, studentId) => (dispatch) => {
   }
 
   dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS })
-  return  post(`${config.domains.restService}${config.services.students}/${studentId}/FamilyMembers/`, body, postOptions(body))
+  return post(`${config.domains.restService}${config.services.students}/${studentId}/FamilyMembers/`, body, postOptions(body))
     .then(response => dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS_SUCCESS, payload: response }))
     .catch(err => dispatch({ type: UPDATE_STUDENT_FAMILY_MEMBERS_ERROR, payload: { err: err, body: body } }))
 }
@@ -209,3 +211,67 @@ export const isAddButtonClicked = (value) => ({
   type: IS_ADD_BUTTON_CLICKED,
   payload: value
 })
+
+export const deleteSetUp = () => (dispatch) => {
+  const body = {}
+
+  dispatch({ type: DELETE_SET_UP })
+  return axios.delete(`${config.domains.restService}${config.services.setUp}`, body, deleteOptions(body))
+    .then(response => dispatch({ type: DELETE_SET_UP_SUCCESS, payload: response }))
+    .catch(err => dispatch({ type: DELETE_SET_UP_ERROR, payload: { err: err, body: body } }))
+}
+
+export const fetchSetUp = () => (dispatch) => {
+  dispatch({ type: FETCH_SET_UP })
+  return get(`${config.domains.restService}${config.services.setUp}`, fetchOptions)
+    .then(json => dispatch({ type: FETCH_SET_UP_SUCCESS, payload: json }))
+    .catch(err => dispatch({ type: FETCH_SET_UP_ERROR, payload: err }))
+}
+
+export const setUpAuthentication = () => (dispatch) => {
+  const body = {}
+
+  dispatch({ type: SET_UP_AUTHENTICATION })
+  return post(`${config.domains.restService}${config.services.setUp}`, body, postOptions(body))
+    .then(response => dispatch({ type: SET_UP_AUTHENTICATION_SUCCESS, payload: response }))
+    .catch(err => dispatch({ type: SET_UP_AUTHENTICATION_ERROR, payload: { err: err, body: body } }))
+}
+
+export const verifyAuthentication = (token) => (dispatch) => {
+  const body = {
+    token: token
+  }
+  dispatch({ type: VERIFY_AUTHENTICATION })
+  return post(`${config.domains.restService}${config.services.verify}`, body, postOptions(body))
+    .then(response => dispatch({ type: VERIFY_AUTHENTICATION_SUCCESS, payload: response }))
+    .catch(err => dispatch({ type: VERIFY_AUTHENTICATION_ERROR, payload: { err: err, body: body } }))
+}
+
+export const loginUser = (emailId, password, otp) => (dispatch) => {
+  const body = {
+    email: emailId,
+    password: password,
+    otp: otp
+  }
+  dispatch({ type: LOGIN_USER })
+  return post(`${config.domains.restService}${config.services.login}`, body, postOptions(body))
+    .then(response => dispatch({ type: LOGIN_USER_SUCCESS, payload: response }))
+    .catch(err => dispatch({ type: LOGIN_USER_ERROR, payload: { err: err, body: body } }))
+}
+
+export const saveOtp = (otp) => ({
+  type: SAVE_OTP,
+  payload: otp
+})
+
+export const verifyOtp = (otp, secret) => (dispatch) => {
+  const body = {
+    otp: otp,
+    secret: secret
+  }
+  console.log('URL:', config.services)
+  dispatch({ type: VERIFY_OTP })
+  return post(`${config.domains.restService}${config.services.verifyOtp}`, body, postOptions(body))
+    .then(response => dispatch({ type: VERIFY_OTP_SUCCESS, payload: response }))
+    .catch(err => dispatch({ type: VERIFY_OTP_ERROR, payload: { err: err, body: body } }))
+}
